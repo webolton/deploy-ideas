@@ -4,5 +4,5 @@
 require_relative '../lib/provisioner'
 
 if __FILE__ == $PROGRAM_NAME
-  x = Provisioner.new(ARGV)
+  provisioner = Provisioner.new(ARGV)
 end

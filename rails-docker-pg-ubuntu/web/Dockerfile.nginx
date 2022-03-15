@@ -1,0 +1,23 @@
+# Get our base image
+
+FROM nginx
+
+# Interally expose environment variables to configure Rails
+ARG SERVER_NAME
+ARG APPLICTION_ROOT
+
+# Tell nginx where to look for files
+ENV RAILS_ROOT $APPLICTION_ROOT
+
+# Set working directory inside image
+WORKDIR $RAILS_ROOT
+
+# Make log directory
+RUN mkdir log
+
+# Copy over static assets
+COPY public public/
+
+#Copy nginx configurations
+COPY config/servers.conf /etc/nginx/confg.d/servers.conf
+COPY config/locations.conf /etc/nginx/default.d/locations.conf

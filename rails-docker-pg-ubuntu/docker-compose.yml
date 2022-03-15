@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RAILS_ENV: ${RAILS_ENV}
+    env_file: .env
+    container_name: app
+    expose:
+      - '3000'
+    volumes:
+      - public:/var/www/${APP_NAME}/public
+      - /var/log/${APP_NAME}:/var/www/${APP_NAME}/log
+    tty: true
+  web:
+    build:
+      context: .
+      args:
+        SERVER_NAME: ${SERVER_NAME}
+        APPLIATION_ROOT: /var/www/${APP_NAME}/current
+      dockerfile: web/Dockerfile.nginx
+    container_name: nginx
+    env_file: .env
+    volumes:
+      - public:/var/www/${APP_NAME}/public
+      - /var/log/${APP_NAME}:/var/www/${APP_NAME}/log
+      - /etc/ssl/certs:/etc/ssl/certs
+      - /etc/pki:/etc/pki
+    links:
+      - app
+    ports:
+      "443:443"
+volumes:
+  public:
+  app:
